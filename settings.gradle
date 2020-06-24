@@ -1,0 +1,2 @@
+rootProject.name='INFS3605App'
+include ':app'
