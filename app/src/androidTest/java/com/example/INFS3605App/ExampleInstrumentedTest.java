@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.INFS3605App;
 
 import android.content.Context;
 

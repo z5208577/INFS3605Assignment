@@ -1,7 +1,8 @@
-package com.example.INFS3605App;
+package com.example.INFS3605App.ui;
 
 import android.os.Bundle;
 
+import com.example.INFS3605App.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
