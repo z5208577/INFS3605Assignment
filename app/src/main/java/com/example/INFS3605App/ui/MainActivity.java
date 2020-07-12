@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         forgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!emailInput.isEmpty()){
+                if(emailInput != null){
                     FirebaseAuth.getInstance().sendPasswordResetEmail(emailInput)
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
