@@ -60,7 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/register"
-        android:text="Button"
+        android:text="Resend Code"
         android:visibility="gone" />
 
     <TextView
@@ -69,5 +69,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/resendCode"
         android:text="Forgotten your password? Reset it here." />
+
+    <Button
+        android:id="@+id/skipSignIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/forgotPassword"
+        android:text="skip sign in (testing)" />
 
 </RelativeLayout>

@@ -12,10 +12,10 @@ import com.example.INFS3605App.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link CrisisRestrictions#newInstance} factory method to
+ * Use the {@link RestrictionsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CrisisRestrictions extends Fragment {
+public class RestrictionsFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -25,7 +25,7 @@ public class CrisisRestrictions extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public CrisisRestrictions() {
+    public RestrictionsFragment() {
         // Required empty public constructor
     }
 
@@ -38,8 +38,8 @@ public class CrisisRestrictions extends Fragment {
      * @return A new instance of fragment CrisisRestrictions.
      */
     // TODO: Rename and change types and number of parameters
-    public static CrisisRestrictions newInstance(String param1, String param2) {
-        CrisisRestrictions fragment = new CrisisRestrictions();
+    public static RestrictionsFragment newInstance(String param1, String param2) {
+        RestrictionsFragment fragment = new RestrictionsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);

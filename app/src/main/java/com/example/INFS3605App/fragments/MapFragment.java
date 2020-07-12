@@ -12,10 +12,10 @@ import com.example.INFS3605App.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link CrisisMap#newInstance} factory method to
+ * Use the {@link MapFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CrisisMap extends Fragment {
+public class MapFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -25,7 +25,7 @@ public class CrisisMap extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public CrisisMap() {
+    public MapFragment() {
         // Required empty public constructor
     }
 
@@ -38,8 +38,8 @@ public class CrisisMap extends Fragment {
      * @return A new instance of fragment CrisisMap.
      */
     // TODO: Rename and change types and number of parameters
-    public static CrisisMap newInstance(String param1, String param2) {
-        CrisisMap fragment = new CrisisMap();
+    public static MapFragment newInstance(String param1, String param2) {
+        MapFragment fragment = new MapFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
