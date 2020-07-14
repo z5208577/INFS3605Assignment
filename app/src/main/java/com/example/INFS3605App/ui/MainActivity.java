@@ -187,9 +187,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
     }
 
     //checks if text fields are empty. If both are not, then the sign-in button is enabled.

@@ -2,8 +2,15 @@ package com.example.INFS3605App.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.SpannableString;
@@ -13,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,19 +36,27 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = RegisterActivity.class.getName();
     public EditText name, email, password, confirmPassword;
-    public String userID, nameInput, emailInput, passwordInput, confirmPasswordInput;
+    public String nameInput, emailInput, passwordInput, confirmPasswordInput;
+    public int reqCode;
     public Button createUser;
+    public ImageView userDp;
+    public Uri userDpURI;
     FirebaseAuth mFirebaseAuth;
     FirebaseAuth.AuthStateListener mAuthStateListener;
     DatabaseReference mDatabaseReference;
@@ -52,7 +68,43 @@ public class RegisterActivity extends AppCompatActivity {
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        //populating UI of register activity
+        reqCode = 1;
+
+
+
+        // UI functionalities grouped by order of appearance in register screen
+        // userDp functionality:
+        userDp = findViewById(R.id.userDp);
+        userDp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // checking required permissions.
+                if (Build.VERSION.SDK_INT>=22){
+                    if (ContextCompat.checkSelfPermission(RegisterActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED){
+                        if(ActivityCompat.shouldShowRequestPermissionRationale(RegisterActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)){
+                            Toast.makeText(RegisterActivity.this, "Please accept required permissions", Toast.LENGTH_SHORT).show();
+
+                        }
+                        else {
+                            ActivityCompat.requestPermissions(RegisterActivity.this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},reqCode);
+                        }
+                    } else {
+
+                        Intent gallery = new Intent(Intent.ACTION_GET_CONTENT);
+                        gallery.setType("image/*");
+                        startActivityForResult(gallery,1);
+                    }
+                } else {
+                    Intent gallery = new Intent(Intent.ACTION_GET_CONTENT);
+                    gallery.setType("image/*");
+                    startActivityForResult(gallery,1);
+                }
+            }
+        });
+
+
+
         name =findViewById(R.id.name);
         name.addTextChangedListener(loginTextWatcher);
 
@@ -120,6 +172,7 @@ public class RegisterActivity extends AppCompatActivity {
                             } else {
                                 //creating a new row for user entity in firebasefirestore
                                 FirebaseUser user = mFirebaseAuth.getCurrentUser();
+                                updateUserInfo();
                                 user.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
@@ -133,9 +186,9 @@ public class RegisterActivity extends AppCompatActivity {
 
                                     }
                                 });
-                                User newUser = new User(nameInput);
-                                mDatabaseReference.child(user.getUid()).setValue(newUser);
-                                Log.d(TAG, "User added");
+                                //User newUser = new User(nameInput);
+                                //mDatabaseReference.child(user.getUid()).setValue(newUser);
+                                //Log.d(TAG, "User added");
                                 Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                                 RegisterActivity.this.startActivity(intent);
                                 mFirebaseAuth.signOut();
@@ -185,5 +238,37 @@ public class RegisterActivity extends AppCompatActivity {
 
         }
     };
+
+    private void updateUserInfo(){
+        StorageReference mStrorage = FirebaseStorage.getInstance().getReference().child("userDps");
+        final StorageReference imageFilePath = mStrorage.child(userDpURI.getLastPathSegment());
+        imageFilePath.putFile(userDpURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
+                                .setDisplayName(nameInput)
+                                .setPhotoUri(userDpURI)
+                                .build();
+
+                        FirebaseUser user = mFirebaseAuth.getCurrentUser();
+                        user.updateProfile(profileUpdate);
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode,int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == reqCode && data != null) {
+            userDpURI = data.getData() ;
+            userDp.setImageURI(userDpURI);
+
+        }
+    }
 
 }
