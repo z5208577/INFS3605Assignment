@@ -3,8 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
     <group android:checkableBehavior="single">
-        <item android:id="@+id/home"
+        <item android:id="@+id/drawer_home"
             android:icon="@drawable/ic_home_black_24dp"
             android:title="Home"/>
     </group>
+
+    <item android:title="Menu">
+        <item android:id="@+id/logout"
+            android:icon="@drawable/ic_arrow_back_black_24dp"
+            android:title="Logout"/>
+    </item>
 </menu>

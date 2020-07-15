@@ -13,6 +13,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.FirebaseUserMetadata;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     public TextView register, forgotPassword;
     FirebaseAuth mFirebaseAuth;
     FirebaseAuth.AuthStateListener mAuthStateListener;
+    FirebaseUserMetadata metadata;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

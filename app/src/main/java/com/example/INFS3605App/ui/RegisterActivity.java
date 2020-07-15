@@ -45,6 +45,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.InputStream;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
@@ -172,7 +173,7 @@ public class RegisterActivity extends AppCompatActivity {
                             } else {
                                 //creating a new row for user entity in firebasefirestore
                                 FirebaseUser user = mFirebaseAuth.getCurrentUser();
-                                updateUserInfo();
+                                updateUserInfo(user);
                                 user.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
@@ -239,26 +240,32 @@ public class RegisterActivity extends AppCompatActivity {
         }
     };
 
-    private void updateUserInfo(){
+    private void updateUserInfo(final FirebaseUser user) {
         StorageReference mStrorage = FirebaseStorage.getInstance().getReference().child("userDps");
-        final StorageReference imageFilePath = mStrorage.child(userDpURI.getLastPathSegment());
-        imageFilePath.putFile(userDpURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
-                                .setDisplayName(nameInput)
-                                .setPhotoUri(userDpURI)
-                                .build();
+        if (userDpURI != null) {
+            final StorageReference imageFilePath = mStrorage.child(userDpURI.getLastPathSegment());
+            imageFilePath.putFile(userDpURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(nameInput)
+                                    .setPhotoUri(uri)
+                                    .build();
 
-                        FirebaseUser user = mFirebaseAuth.getCurrentUser();
-                        user.updateProfile(profileUpdate);
-                    }
-                });
-            }
-        });
+                            user.updateProfile(profileUpdate);
+                        }
+                    });
+                }
+            });
+        } else {
+            UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
+                    .setDisplayName(nameInput)
+                    .build();
+            user.updateProfile(profileUpdate);
+        }
     }
 
     @Override
