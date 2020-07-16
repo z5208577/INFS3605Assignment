@@ -13,6 +13,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.FirebaseUserMetadata;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,15 +36,42 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getName();
     public EditText email, password;
     public String emailInput,passwordInput;
-    public Button signIn, resendCode;
+    public Button signIn, resendCode, skipSignIn;
     public TextView register, forgotPassword;
     FirebaseAuth mFirebaseAuth;
     FirebaseAuth.AuthStateListener mAuthStateListener;
+    FirebaseUserMetadata metadata;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        skipSignIn = findViewById(R.id.skipSignIn);
+        skipSignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mFirebaseAuth.signInWithEmailAndPassword("stevenchung23@gmail.com","123456").addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(!task.isSuccessful()){
+                            Toast.makeText(MainActivity.this,"Incorrect credentials",Toast.LENGTH_SHORT).show();
+                        } else {
+                            if(mFirebaseAuth.getCurrentUser().isEmailVerified()){
+                                Intent intent = new Intent(MainActivity.this, MainFragmentContainerActivity.class);
+                                MainActivity.this.startActivity(intent);
+                            } else {
+                                Toast.makeText(MainActivity.this,"Email is not verified, check email inbox or press to resend email",Toast.LENGTH_SHORT).show();
+                                resendCode.setVisibility(View.VISIBLE);
+
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
 
         mFirebaseAuth = FirebaseAuth.getInstance();
 
@@ -162,9 +190,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
     }
 
     //checks if text fields are empty. If both are not, then the sign-in button is enabled.
@@ -187,25 +212,4 @@ public class MainActivity extends AppCompatActivity {
 
         }
     };
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }

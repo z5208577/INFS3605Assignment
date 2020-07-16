@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_nav"
+    app:startDestination="@id/home">
+
+    <fragment
+        android:id="@+id/companyDiscussionBoard"
+        android:name="com.example.INFS3605App.fragments.ForumFragment"
+        android:label="fragment_company_discussion_board"
+        tools:layout="@layout/fragment_company_discussion_board" />
+    <fragment
+        android:id="@+id/crisisMap"
+        android:name="com.example.INFS3605App.fragments.MapFragment"
+        android:label="fragment_crisis_map"
+        tools:layout="@layout/fragment_crisis_map" />
+    <fragment
+        android:id="@+id/crisisPlans"
+        android:name="com.example.INFS3605App.fragments.PlanFragment"
+        android:label="fragment_crisis_plans"
+        tools:layout="@layout/fragment_crisis_plans" />
+    <fragment
+        android:id="@+id/crisisRestrictions"
+        android:name="com.example.INFS3605App.fragments.RestrictionsFragment"
+        android:label="fragment_crisis_restrictions"
+        tools:layout="@layout/fragment_crisis_restrictions" />
+    <fragment
+        android:id="@+id/worldCrisisNews"
+        android:name="com.example.INFS3605App.fragments.WorldCrisisNews"
+        android:label="fragment_world_crisis_news"
+        tools:layout="@layout/fragment_world_crisis_news" />
+    <fragment
+        android:id="@+id/home"
+        android:name="com.example.INFS3605App.fragments.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+</navigation>
