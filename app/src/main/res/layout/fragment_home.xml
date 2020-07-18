@@ -72,8 +72,17 @@ tools:context="com.example.INFS3605App.fragments.HomeFragment">
         android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         android:scaleType="fitXY"
         app:srcCompat="@drawable/ic_place_black_24dp" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:src="@drawable/nswconnectlogo" />
+
 </LinearLayout>
 
 </LinearLayout>

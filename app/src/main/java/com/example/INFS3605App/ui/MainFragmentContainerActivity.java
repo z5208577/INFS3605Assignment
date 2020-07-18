@@ -17,12 +17,15 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.INFS3605App.R;
 import com.example.INFS3605App.fragments.ForumFragment;
 import com.example.INFS3605App.fragments.MapFragment;
@@ -46,6 +49,7 @@ public class MainFragmentContainerActivity extends AppCompatActivity implements 
     public ImageView drawerUserDp;
     public FirebaseUser currentUser;
     public FirebaseAuth mFirebaseAuth;
+    public boolean doubleBackToExitPressedOnce = false;
 
 
     @Override
@@ -85,6 +89,7 @@ public class MainFragmentContainerActivity extends AppCompatActivity implements 
 
     }
 
+    // populating bottom navigation view
     public BottomNavigationView.OnNavigationItemSelectedListener navigationListener = new BottomNavigationView.OnNavigationItemSelectedListener(){
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem){
@@ -119,6 +124,7 @@ public class MainFragmentContainerActivity extends AppCompatActivity implements 
         }
     };
 
+    //method to uncheck menu items
     public void uncheckAllMenuItems(NavigationView navigationView) {
         int size = navigationView.getMenu().size();
         for (int i = 0; i < size; i++) {
@@ -150,7 +156,21 @@ public class MainFragmentContainerActivity extends AppCompatActivity implements 
         if(drawer.isDrawerOpen(GravityCompat.START)){
             drawer.closeDrawer(GravityCompat.START);
         }  else {
-            super.onBackPressed();
+            //reference: https://stackoverflow.com/questions/8430805/clicking-the-back-button-twice-to-exit-an-activity
+            if (doubleBackToExitPressedOnce) {
+                super.onBackPressed();
+                mFirebaseAuth.signOut();
+                return;
+            }
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce=false;
+                }
+            }, 2000);
         }
     }
 
@@ -166,7 +186,7 @@ public class MainFragmentContainerActivity extends AppCompatActivity implements 
     public void updateNavDrawer(){
         drawerUserDp = navigationView.getHeaderView(0).findViewById(R.id.drawerUserDp);
         if (currentUser.getPhotoUrl()!=null){
-            Glide.with(this).load(currentUser.getPhotoUrl()).into(drawerUserDp);
+            Glide.with(this).load(currentUser.getPhotoUrl()).apply(RequestOptions.circleCropTransform()).into(drawerUserDp);
         }
 
         drawerUserEmail = navigationView.getHeaderView(0).findViewById(R.id.drawerUserEmail);

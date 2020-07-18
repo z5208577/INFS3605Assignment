@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        //testing purposes will remove whe put in production
         skipSignIn = findViewById(R.id.skipSignIn);
         skipSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //preventing accidental logins
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -107,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        // firebase implementation of authentication
         signIn = findViewById(R.id.signIn);
         signIn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -115,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(!task.isSuccessful()){
-                            Toast.makeText(MainActivity.this,"Incorrect credentials",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this,"Incorrect credentials or no connection to internet",Toast.LENGTH_SHORT).show();
                         } else {
                             if(mFirebaseAuth.getCurrentUser().isEmailVerified()){
                                 Intent intent = new Intent(MainActivity.this, MainFragmentContainerActivity.class);
@@ -131,21 +133,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
-                if(mFirebaseUser !=null){
-                    Toast.makeText(MainActivity.this,"Logged in",Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(MainActivity.this, MainFragmentContainerActivity.class);
-                    MainActivity.this.startActivity(intent);
-                } else {
-                    Toast.makeText(MainActivity.this,"Please log in",Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        };
-
+        //Resending Verification Email,
         resendCode = findViewById(R.id.resendCode);
         resendCode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,6 +154,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        // method for password recovery, mostly done through firebase
         forgotPassword = findViewById(R.id.forgotPassword);
         SpannableString forgotPass = new SpannableString("Forgotten your password? Reset it here.");
         forgotPass.setSpan(new UnderlineSpan(), 0, content.length(), 0);
