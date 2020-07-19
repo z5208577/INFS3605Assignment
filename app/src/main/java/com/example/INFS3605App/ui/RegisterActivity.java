@@ -98,7 +98,7 @@ public class RegisterActivity extends AppCompatActivity {
         name.addTextChangedListener(loginTextWatcher);
 
 
-        email = findViewById(R.id.email);
+        email = findViewById(R.id.forgottenPassEmail);
         email.addTextChangedListener(loginTextWatcher);
         password = findViewById(R.id.password);
         password.addTextChangedListener(loginTextWatcher);

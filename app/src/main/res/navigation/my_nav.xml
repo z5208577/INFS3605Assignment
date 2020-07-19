@@ -9,7 +9,7 @@
         android:id="@+id/companyDiscussionBoard"
         android:name="com.example.INFS3605App.fragments.ForumFragment"
         android:label="fragment_company_discussion_board"
-        tools:layout="@layout/fragment_company_discussion_board" />
+        tools:layout="@layout/fragment_forum" />
     <fragment
         android:id="@+id/crisisMap"
         android:name="com.example.INFS3605App.fragments.MapFragment"

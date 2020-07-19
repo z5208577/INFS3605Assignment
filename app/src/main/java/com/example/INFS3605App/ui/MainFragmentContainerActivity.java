@@ -97,25 +97,24 @@ public class MainFragmentContainerActivity extends AppCompatActivity implements 
             switch(menuItem.getItemId()){
                 case R.id.bottomHome:
                     fragment = new HomeFragment();
-                    uncheckAllMenuItems(navigationView);
+                    navigationView.getMenu().setGroupCheckable(0, false, true);
                     break;
-                case R.id.companyDiscussionBoard:
+                case R.id.bottomForum:
                     fragment = new ForumFragment();
-                    uncheckAllMenuItems(navigationView);
+                    navigationView.getMenu().setGroupCheckable(0, false, true);
                     break;
-                case R.id.crisisRestrictions:
+                case R.id.bottomCrisisRestrictions:
                     fragment = new RestrictionsFragment();
-                    uncheckAllMenuItems(navigationView);
+                    navigationView.getMenu().setGroupCheckable(0, false, true);
                     break;
-
-                case R.id.worldCrisisNews:
+                case R.id.bottomWorldCrisisNews:
                     fragment = new WorldCrisisNews();
-                    uncheckAllMenuItems(navigationView);
+                    navigationView.getMenu().setGroupCheckable(0, false, true);
                     break;
 
-                case R.id.crisisMap:
+                case R.id.bottomCrisisMap:
                     fragment = new MapFragment();
-                    uncheckAllMenuItems(navigationView);
+                    navigationView.getMenu().setGroupCheckable(0, false, true);
                     break;
             }
             getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment,
@@ -123,14 +122,6 @@ public class MainFragmentContainerActivity extends AppCompatActivity implements 
             return true;
         }
     };
-
-    //method to uncheck menu items
-    public void uncheckAllMenuItems(NavigationView navigationView) {
-        int size = navigationView.getMenu().size();
-        for (int i = 0; i < size; i++) {
-            navigationView.getMenu().getItem(i).setChecked(false);
-        }
-    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -156,21 +147,22 @@ public class MainFragmentContainerActivity extends AppCompatActivity implements 
         if(drawer.isDrawerOpen(GravityCompat.START)){
             drawer.closeDrawer(GravityCompat.START);
         }  else {
-            //reference: https://stackoverflow.com/questions/8430805/clicking-the-back-button-twice-to-exit-an-activity
-            if (doubleBackToExitPressedOnce) {
+            //Checking for fragment count on backstack
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                getSupportFragmentManager().popBackStack();
+            } else if (!doubleBackToExitPressedOnce) {
+                this.doubleBackToExitPressedOnce = true;
+                Toast.makeText(this,"Please click BACK again to exit.", Toast.LENGTH_SHORT).show();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        doubleBackToExitPressedOnce= false;
+                    }}, 2000);
+            } else {
                 super.onBackPressed();
                 mFirebaseAuth.signOut();
                 return;
             }
-            this.doubleBackToExitPressedOnce = true;
-            Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
-            new Handler().postDelayed(new Runnable() {
-
-                @Override
-                public void run() {
-                    doubleBackToExitPressedOnce=false;
-                }
-            }, 2000);
         }
     }
 

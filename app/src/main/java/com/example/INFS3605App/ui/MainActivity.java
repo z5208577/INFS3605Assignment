@@ -8,8 +8,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -17,7 +15,6 @@ import com.google.firebase.auth.FirebaseUserMetadata;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.text.Editable;
 import android.text.SpannableString;
@@ -25,8 +22,6 @@ import android.text.TextWatcher;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -75,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
         mFirebaseAuth = FirebaseAuth.getInstance();
 
-        email = findViewById(R.id.email);
+        email = findViewById(R.id.forgottenPassEmail);
         email.addTextChangedListener(loginTextWatcher);
         password = findViewById(R.id.password);
         password.addTextChangedListener(loginTextWatcher);
@@ -163,20 +158,8 @@ public class MainActivity extends AppCompatActivity {
         forgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(emailInput != null){
-                    FirebaseAuth.getInstance().sendPasswordResetEmail(emailInput)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        Log.d(TAG, "Email sent.");
-                                        Toast.makeText(MainActivity.this, "Password reset link sent", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Toast.makeText(MainActivity.this, "Given email address was not valid or not yet used", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                }
+                Intent intent = new Intent(MainActivity.this, ForgottenPasswordActivity.class);
+                MainActivity.this.startActivity(intent);
             }
         });
 

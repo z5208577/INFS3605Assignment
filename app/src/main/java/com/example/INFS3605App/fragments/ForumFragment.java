@@ -14,12 +14,17 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -29,18 +34,24 @@ import android.widget.Toolbar;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.INFS3605App.R;
-import com.example.INFS3605App.ui.RegisterActivity;
+import com.example.INFS3605App.adapters.PostAdapter;
 import com.example.INFS3605App.utils.Post;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -58,6 +69,12 @@ public class ForumFragment extends Fragment {
     private Uri postImageUri = null;
     public ProgressBar postPorgressBar;
     public StorageReference imageFilePath;
+    public RecyclerView postRecyclerView;
+    public PostAdapter postAdapter;
+    public FirebaseDatabase mFireDatabase;
+    public DatabaseReference mDatabaseReference;
+    public List<Post> mPosts;
+
 
     public ForumFragment() {
         // Required empty public constructor
@@ -73,18 +90,17 @@ public class ForumFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-       View view = inflater.inflate(R.layout.fragment_company_discussion_board, container, false);
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        currentUser = mFirebaseAuth.getCurrentUser();
+       View view = inflater.inflate(R.layout.fragment_forum, container, false);
+       mFirebaseAuth = FirebaseAuth.getInstance();
+       currentUser = mFirebaseAuth.getCurrentUser();
+       mFireDatabase = FirebaseDatabase.getInstance();
+       mDatabaseReference = mFireDatabase.getReference("Posts");
        popupCreatePost = new Dialog(this.getContext());
        initiatePopup();
        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.createPost);
@@ -94,9 +110,39 @@ public class ForumFragment extends Fragment {
                popupCreatePost.show();
            }
        });
-        return view;
+
+       postRecyclerView = view.findViewById(R.id.postRecyclerView);
+       postRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+
+       return view;
     }
 
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //gets post from database
+        mDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mPosts = new ArrayList<>();
+                for (DataSnapshot postSnap: snapshot.getChildren()){
+                    Post post = postSnap.getValue(Post.class);
+                    mPosts.add(post);
+                }
+                postAdapter = new PostAdapter(getActivity(),mPosts);
+                postRecyclerView.setAdapter(postAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    //popup from floating action button to create a post
     public void initiatePopup(){
 
         popupCreatePost.setContentView(R.layout.post_popup);
@@ -228,4 +274,5 @@ public class ForumFragment extends Fragment {
             }
         });
     }
+
 }

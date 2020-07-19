@@ -6,10 +6,11 @@
     tools:context="com.example.INFS3605App.fragments.ForumFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/postRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="discusson" />
+        android:layout_height="match_parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/createPost"
