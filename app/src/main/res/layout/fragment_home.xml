@@ -7,13 +7,178 @@ android:layout_height="match_parent"
 android:orientation="vertical"
 tools:context="com.example.INFS3605App.fragments.HomeFragment">
 
-<ImageButton
-    android:id="@+id/alerts"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    android:scaleType="fitXY"
-    app:srcCompat="@drawable/ic_warning_black_24dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/ic_logo"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="3dp"
+                android:layout_weight="1"
+                android:src="@drawable/common_google_signin_btn_icon_light"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvHeading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="3dp"
+                android:gravity="center"
+                android:text="Crisis Management \n and Communication"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ic_logo"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#B1ACAC">
+
+            <TextView
+                android:id="@+id/tvAlerts"
+                android:layout_width="206dp"
+                android:layout_height="114dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="3dp"
+                android:layout_weight="1"
+                android:background="#B1ACAC"
+                android:gravity="center|center_horizontal"
+                android:text="ALERTS"
+                android:textSize="50sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/alerts"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.16" />
+
+            <ImageButton
+                android:id="@+id/alerts"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginBottom="3dp"
+                android:layout_weight="1"
+                android:background="#B1ACAC"
+                android:scaleType="fitXY"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvAlerts"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_forum_alert" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#FFFFFF"
+        android:orientation="horizontal">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageButton
+                android:id="@+id/discusson"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="70dp"
+                android:layout_marginLeft="70dp"
+                android:layout_marginTop="3dp"
+                android:layout_weight="1"
+                android:background="#FFFFFF"
+                android:scaleType="fitXY"
+                app:layout_constraintBottom_toBottomOf="parent"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_forum_discussion" />
+
+            <TextView
+                android:id="@+id/tvDiscussion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:text="Company Discussion"
+
+                android:textSize="18sp"
+
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/discusson"
+                app:layout_constraintStart_toStartOf="@+id/discusson"
+                app:layout_constraintTop_toBottomOf="@+id/discusson" />
+
+            <ImageButton
+                android:id="@+id/worldnews"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="70dp"
+                android:layout_marginRight="70dp"
+
+                android:layout_weight="1"
+                android:background="#FFFFFF"
+                android:scaleType="fitCenter"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_forum_global" />
+
+            <TextView
+                android:id="@+id/tvWorldNews"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:text="World Crisis News"
+                android:textSize="18sp"
+
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/worldnews"
+                app:layout_constraintStart_toStartOf="@+id/worldnews"
+                app:layout_constraintTop_toBottomOf="@+id/worldnews" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
 
 <LinearLayout
     android:layout_width="match_parent"
@@ -21,21 +186,68 @@ tools:context="com.example.INFS3605App.fragments.HomeFragment">
     android:layout_weight="1"
     android:orientation="horizontal">
 
-    <ImageButton
-        android:id="@+id/discusson"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/ic_forum_black_24dp" />
+        android:layout_weight="1">
 
-    <ImageButton
-        android:id="@+id/worldnews"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/ic_public_black_24dp" />
+        <ImageButton
+            android:id="@+id/plans"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="70dp"
+            android:layout_marginLeft="70dp"
+            android:layout_marginTop="3dp"
+            android:layout_weight="1"
+            android:background="#FFFFFF"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toTopOf="@+id/tvCrisis"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_forum_checklist" />
+
+        <TextView
+            android:id="@+id/tvCrisis"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:text="Crisis Plans"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/plans"
+            app:layout_constraintStart_toStartOf="@+id/plans"
+            app:layout_constraintTop_toBottomOf="@+id/plans" />
+
+        <ImageButton
+            android:id="@+id/restrictions"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="70dp"
+            android:layout_marginRight="70dp"
+            android:layout_weight="1"
+            android:background="#FFFFFF"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toTopOf="@+id/tvCrisisR"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_forum_barrier" />
+
+        <TextView
+            android:id="@+id/tvCrisisR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:text="Crisis Restrictions"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/restrictions"
+            app:layout_constraintStart_toStartOf="@+id/restrictions"
+            app:layout_constraintTop_toBottomOf="@+id/restrictions" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
 
@@ -45,43 +257,66 @@ tools:context="com.example.INFS3605App.fragments.HomeFragment">
     android:layout_weight="1"
     android:orientation="horizontal">
 
-    <ImageButton
-        android:id="@+id/plans"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/ic_check_box_black_24dp" />
+        android:layout_weight="1">
 
-    <ImageButton
-        android:id="@+id/restrictions"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/ic_insert_drive_file_black_24dp" />
-</LinearLayout>
+        <ImageButton
+            android:id="@+id/map"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="70dp"
+            android:layout_marginLeft="70dp"
+            android:layout_marginTop="3dp"
+            android:layout_weight="1"
+            android:background="#FFFFFF"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toTopOf="@+id/tvCrisisM"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_forum_location" />
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tvBCS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:text="Business Connect"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/businessConnect"
+            app:layout_constraintStart_toStartOf="@+id/businessConnect"
+            app:layout_constraintTop_toBottomOf="@+id/businessConnect" />
 
-    <ImageButton
-        android:id="@+id/map"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/ic_place_black_24dp" />
+        <ImageView
+            android:id="@+id/businessConnect"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="35dp"
+            android:layout_marginRight="35dp"
+            android:layout_weight="1"
+            android:background="#FFFFFF"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_forum_bcs"
+            app:layout_constraintBottom_toTopOf="@+id/tvBCS"
+            app:layout_constraintEnd_toEndOf="parent"
 
-    <ImageView
-        android:id="@+id/businessConnect"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:src="@drawable/nswconnectlogo" />
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvCrisisM"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Crisis Map"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/map"
+            app:layout_constraintStart_toStartOf="@+id/map"
+            app:layout_constraintTop_toBottomOf="@+id/map" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
 
