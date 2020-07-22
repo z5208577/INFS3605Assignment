@@ -1,48 +1,35 @@
 package com.example.INFS3605App.fragments;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.INFS3605App.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class HomeFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    public ImageView alerts, discussion, worldnews, plans, restrictions, map, businessConnect;
+    public BottomNavigationView mBottomNavigationView;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public HomeFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Home.
-     */
-    // TODO: Rename and change types and number of parameters
     public static HomeFragment newInstance(String param1, String param2) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,8 +38,6 @@ public class HomeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -60,6 +45,116 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        final View view = inflater.inflate(R.layout.fragment_home, container, false);
+        final AppCompatActivity activity = (AppCompatActivity) view.getContext();
+        mBottomNavigationView= activity.findViewById(R.id.bottomNavigationView);
+        enableCheckedItems(mBottomNavigationView);
+        mBottomNavigationView.getMenu().findItem(R.id.bottomHome).setChecked(true);
+        alerts = view.findViewById(R.id.alerts);
+        alerts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertsFragment alertsFragment= new AlertsFragment();
+                activity.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.mainFragment, alertsFragment, "alertsFragment")
+                        .addToBackStack(null)
+                        .commit();
+                clearCheckedItems(mBottomNavigationView);
+            }
+        });
+        discussion = view.findViewById(R.id.discusson);
+        discussion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppCompatActivity activity = (AppCompatActivity) view.getContext();
+                ForumFragment forumFragment= new ForumFragment();
+                activity.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.mainFragment, forumFragment, "forumFragment")
+                        .addToBackStack(null)
+                        .commit();
+                mBottomNavigationView.getMenu().findItem(R.id.bottomForum).setChecked(true);
+            }
+        });
+        worldnews = view.findViewById(R.id.worldnews);
+        worldnews.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppCompatActivity activity = (AppCompatActivity) view.getContext();
+                WorldCrisisNews worldCrisisNews = new WorldCrisisNews();
+                activity.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.mainFragment, worldCrisisNews, "worldnewsFragment")
+                        .addToBackStack(null)
+                        .commit();
+                mBottomNavigationView.getMenu().findItem(R.id.bottomWorldCrisisNews).setChecked(true);
+            }
+        });
+        plans = view.findViewById(R.id.plans);
+        plans.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppCompatActivity activity = (AppCompatActivity) view.getContext();
+                PlanFragment planFragment = new PlanFragment();
+                activity.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.mainFragment, planFragment, "postDetailFragment")
+                        .addToBackStack(null)
+                        .commit();
+                clearCheckedItems(mBottomNavigationView);
+            }
+        });
+
+        restrictions = view.findViewById(R.id.restrictions);
+        restrictions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppCompatActivity activity = (AppCompatActivity) view.getContext();
+                PlanFragment planFragment= new PlanFragment();
+                activity.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.mainFragment, planFragment, "postDetailFragment")
+                        .addToBackStack(null)
+                        .commit();
+                mBottomNavigationView.getMenu().findItem(R.id.bottomCrisisRestrictions).setChecked(true);
+            }
+        });
+        map = view.findViewById(R.id.map);
+        map.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppCompatActivity activity = (AppCompatActivity) view.getContext();
+                MapFragment mapFragment = new MapFragment();
+                activity.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.mainFragment, mapFragment, "postDetailFragment")
+                        .addToBackStack(null)
+                        .commit();
+                mBottomNavigationView.getMenu().findItem(R.id.bottomCrisisMap).setChecked(true);
+            }
+        });
+
+        businessConnect = view.findViewById(R.id.businessConnect);
+        businessConnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://www.business.nsw.gov.au/support-for-business/businessconnect"));
+                startActivity(browserIntent);
+            }
+        });
+
+        return view;
     }
+
+    public static void clearCheckedItems(BottomNavigationView view) {
+        int size = view.getMenu().size();
+        for (int i = 0; i < size; i++) {
+            view.getMenu().getItem(i).setChecked(false);
+            view.getMenu().getItem(i).setCheckable(false);
+        }
+    }
+    public static void enableCheckedItems(BottomNavigationView view) {
+        int size = view.getMenu().size();
+        for (int i = 0; i < size; i++) {
+            view.getMenu().getItem(i).setChecked(false);
+            view.getMenu().getItem(i).setCheckable(true);
+        }
+    }
+
 }

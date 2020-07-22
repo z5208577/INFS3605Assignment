@@ -1,14 +1,59 @@
 package com.example.INFS3605App.fragments;
 
+import android.Manifest;
+import android.app.Dialog;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.Toolbar;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.INFS3605App.R;
+import com.example.INFS3605App.adapters.PostAdapter;
+import com.example.INFS3605App.utils.Post;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,33 +61,28 @@ import com.example.INFS3605App.R;
  * create an instance of this fragment.
  */
 public class ForumFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    Dialog popupCreatePost;
+    public ImageView newPostUserDp, newPostPostImage, createPost;
+    public TextView newPostTitle, newPostContent;
+    public FirebaseUser currentUser;
+    public FirebaseAuth mFirebaseAuth;
+    private Uri postImageUri = null;
+    public ProgressBar postPorgressBar;
+    public StorageReference imageFilePath;
+    public RecyclerView postRecyclerView;
+    public PostAdapter postAdapter;
+    public FirebaseDatabase mFireDatabase;
+    public DatabaseReference mDatabaseReference;
+    public List<Post> mPosts;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public ForumFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CompanyDiscussionBoard.
-     */
-    // TODO: Rename and change types and number of parameters
     public static ForumFragment newInstance(String param1, String param2) {
         ForumFragment fragment = new ForumFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -50,16 +90,189 @@ public class ForumFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_company_discussion_board, container, false);
+       View view = inflater.inflate(R.layout.fragment_forum, container, false);
+       mFirebaseAuth = FirebaseAuth.getInstance();
+       currentUser = mFirebaseAuth.getCurrentUser();
+       mFireDatabase = FirebaseDatabase.getInstance();
+       mDatabaseReference = mFireDatabase.getReference("Posts");
+       popupCreatePost = new Dialog(this.getContext());
+       initiatePopup();
+       FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.createPost);
+       fab.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               popupCreatePost.show();
+           }
+       });
+
+       postRecyclerView = view.findViewById(R.id.postRecyclerView);
+       postRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+
+       return view;
     }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //gets post from database
+        mDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mPosts = new ArrayList<>();
+                for (DataSnapshot postSnap: snapshot.getChildren()){
+                    Post post = postSnap.getValue(Post.class);
+                    mPosts.add(post);
+                }
+                postAdapter = new PostAdapter(getActivity(),mPosts);
+                postRecyclerView.setAdapter(postAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    //popup from floating action button to create a post
+    public void initiatePopup(){
+
+        popupCreatePost.setContentView(R.layout.post_popup);
+        popupCreatePost.getWindow().setBackgroundDrawable(new ColorDrawable((Color.TRANSPARENT)));
+        popupCreatePost.getWindow().setLayout(Toolbar.LayoutParams.MATCH_PARENT,Toolbar.LayoutParams.WRAP_CONTENT);
+        popupCreatePost.getWindow().getAttributes().gravity= Gravity.TOP;
+
+
+        newPostUserDp= popupCreatePost.findViewById(R.id.newpost_userDp);
+        postPorgressBar = popupCreatePost.findViewById(R.id.postProgressBar);
+        //method to create a post
+        newPostPostImage = popupCreatePost.findViewById(R.id.newpost_image);
+        newPostPostImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // method to allow user to select an image to post. similar to register select DP
+                if (Build.VERSION.SDK_INT>=22){
+                    if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED){
+                        if(ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)){
+                            Toast.makeText(getContext(), "Please accept required permissions", Toast.LENGTH_SHORT).show();
+
+                        }
+                        else {
+                            ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},2);
+                        }
+                    } else {
+
+                        Intent gallery = new Intent(Intent.ACTION_GET_CONTENT);
+                        gallery.setType("image/*");
+                        startActivityForResult(gallery,2);
+                    }
+                } else {
+                    Intent gallery = new Intent(Intent.ACTION_GET_CONTENT);
+                    gallery.setType("image/*");
+                    startActivityForResult(gallery,2);
+                }
+            }
+        });
+        newPostTitle = popupCreatePost.findViewById(R.id.newpost_title);
+        newPostContent = popupCreatePost.findViewById(R.id.newpost_content);
+
+
+        createPost = popupCreatePost.findViewById(R.id.newpost_post);
+        createPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //check if inputs are fufilled
+                if (!newPostTitle.getText().toString().isEmpty() && !newPostContent.getText().toString().isEmpty()){
+
+                    //checks if post is too large
+                    if(newPostTitle.getText().toString().length() > 50 && newPostContent.getText().toString().length() > 200){
+                        Toast.makeText(getContext(), "Post content or title too large.", Toast.LENGTH_SHORT).show();
+                    //else send post object to database
+                    } else {
+                        postPorgressBar.setVisibility(View.VISIBLE);
+                        createPost.setVisibility(View.INVISIBLE);
+                        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("forum_images");
+                        // checks if no image was attached to post
+                        if(postImageUri == null){
+                            makePost("defaultPostImage");
+                        } else {
+                            //post with image
+                            imageFilePath = storageReference.child(postImageUri.getLastPathSegment());
+                            imageFilePath.putFile(postImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            //creating post object with image
+                                            String imageDownloadLink = uri.toString();
+                                            makePost(imageDownloadLink);
+                                        }
+                                        //failed imageupload
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(getContext(), "Please try again.", Toast.LENGTH_SHORT).show();
+                                            createPost.setVisibility(View.VISIBLE);
+                                            postPorgressBar.setVisibility(View.INVISIBLE);
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }
+                } else {
+                    Toast.makeText(getContext(), "Invalid Post details.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        if (currentUser.getPhotoUrl()!=null){
+            Glide.with(this).load(currentUser.getPhotoUrl()).apply(RequestOptions.circleCropTransform()).into(newPostUserDp);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == 2 && data != null) {
+            postImageUri = data.getData() ;
+            newPostPostImage.setImageURI(postImageUri);
+
+        }
+    }
+    public void makePost(String image){
+        Post post = new Post(newPostTitle.getText().toString()
+                ,newPostContent.getText().toString()
+                ,image
+                ,currentUser.getDisplayName()
+                ,currentUser.getUid()
+                ,currentUser.getPhotoUrl().toString());
+
+        //post object is added into firebase
+        FirebaseDatabase mFireDatabase =  FirebaseDatabase.getInstance();
+        DatabaseReference myRef = mFireDatabase.getReference("Posts").push();
+        String key = myRef.getKey();
+        post.setPostId(key);
+
+        myRef.setValue(post).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                createPost.setVisibility(View.VISIBLE);
+                postPorgressBar.setVisibility(View.INVISIBLE);
+                Toast.makeText(getContext(), "Post was posted.", Toast.LENGTH_SHORT).show();
+                popupCreatePost.dismiss();
+            }
+        });
+    }
+
 }

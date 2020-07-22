@@ -17,12 +17,15 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.INFS3605App.R;
 import com.example.INFS3605App.fragments.ForumFragment;
 import com.example.INFS3605App.fragments.MapFragment;
@@ -46,6 +49,7 @@ public class MainFragmentContainerActivity extends AppCompatActivity implements 
     public ImageView drawerUserDp;
     public FirebaseUser currentUser;
     public FirebaseAuth mFirebaseAuth;
+    public boolean doubleBackToExitPressedOnce = false;
 
 
     @Override
@@ -85,6 +89,7 @@ public class MainFragmentContainerActivity extends AppCompatActivity implements 
 
     }
 
+    // populating bottom navigation view
     public BottomNavigationView.OnNavigationItemSelectedListener navigationListener = new BottomNavigationView.OnNavigationItemSelectedListener(){
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem){
@@ -92,25 +97,24 @@ public class MainFragmentContainerActivity extends AppCompatActivity implements 
             switch(menuItem.getItemId()){
                 case R.id.bottomHome:
                     fragment = new HomeFragment();
-                    uncheckAllMenuItems(navigationView);
+                    navigationView.getMenu().setGroupCheckable(0, false, true);
                     break;
-                case R.id.companyDiscussionBoard:
+                case R.id.bottomForum:
                     fragment = new ForumFragment();
-                    uncheckAllMenuItems(navigationView);
+                    navigationView.getMenu().setGroupCheckable(0, false, true);
                     break;
-                case R.id.crisisRestrictions:
+                case R.id.bottomCrisisRestrictions:
                     fragment = new RestrictionsFragment();
-                    uncheckAllMenuItems(navigationView);
+                    navigationView.getMenu().setGroupCheckable(0, false, true);
                     break;
-
-                case R.id.worldCrisisNews:
+                case R.id.bottomWorldCrisisNews:
                     fragment = new WorldCrisisNews();
-                    uncheckAllMenuItems(navigationView);
+                    navigationView.getMenu().setGroupCheckable(0, false, true);
                     break;
 
-                case R.id.crisisMap:
+                case R.id.bottomCrisisMap:
                     fragment = new MapFragment();
-                    uncheckAllMenuItems(navigationView);
+                    navigationView.getMenu().setGroupCheckable(0, false, true);
                     break;
             }
             getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment,
@@ -118,13 +122,6 @@ public class MainFragmentContainerActivity extends AppCompatActivity implements 
             return true;
         }
     };
-
-    public void uncheckAllMenuItems(NavigationView navigationView) {
-        int size = navigationView.getMenu().size();
-        for (int i = 0; i < size; i++) {
-            navigationView.getMenu().getItem(i).setChecked(false);
-        }
-    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -150,7 +147,22 @@ public class MainFragmentContainerActivity extends AppCompatActivity implements 
         if(drawer.isDrawerOpen(GravityCompat.START)){
             drawer.closeDrawer(GravityCompat.START);
         }  else {
-            super.onBackPressed();
+            //Checking for fragment count on backstack
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                getSupportFragmentManager().popBackStack();
+            } else if (!doubleBackToExitPressedOnce) {
+                this.doubleBackToExitPressedOnce = true;
+                Toast.makeText(this,"Please click BACK again to exit.", Toast.LENGTH_SHORT).show();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        doubleBackToExitPressedOnce= false;
+                    }}, 2000);
+            } else {
+                super.onBackPressed();
+                mFirebaseAuth.signOut();
+                return;
+            }
         }
     }
 
@@ -166,7 +178,7 @@ public class MainFragmentContainerActivity extends AppCompatActivity implements 
     public void updateNavDrawer(){
         drawerUserDp = navigationView.getHeaderView(0).findViewById(R.id.drawerUserDp);
         if (currentUser.getPhotoUrl()!=null){
-            Glide.with(this).load(currentUser.getPhotoUrl()).into(drawerUserDp);
+            Glide.with(this).load(currentUser.getPhotoUrl()).apply(RequestOptions.circleCropTransform()).into(drawerUserDp);
         }
 
         drawerUserEmail = navigationView.getHeaderView(0).findViewById(R.id.drawerUserEmail);
