@@ -40,7 +40,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
-        Glide.with(mContext).load(mData.get(position).getUserDp()).apply(RequestOptions.circleCropTransform()).into(holder.addedCommentUserDp);
+        if(!mData.get(position).getUserDp().equals("default")){
+            Glide.with(mContext).load(mData.get(position).getUserDp()).apply(RequestOptions.circleCropTransform()).into(holder.addedCommentUserDp);
+        } else {
+            Glide.with(mContext).load("https://firebasestorage.googleapis.com/v0/b/infs3605-32bdc.appspot.com/o/userDps%2FdefaultUser.jpg?alt=media&token=d0ae4498-18f3-4195-a07f-e9ee351273e2 " )
+                    .apply(RequestOptions.circleCropTransform()).into(holder.addedCommentUserDp);
+        }
         holder.addedCommentContent.setText(mData.get(position).getContent());
         holder.addedCommentUser.setText(mData.get(position).getUsername());
         holder.addedCommentTimestamp.setText(timestampToString((Long)mData.get(position).getTimestamp()));

@@ -192,7 +192,6 @@ public class ForumFragment extends Fragment {
             public void onClick(View v) {
                 //check if inputs are fufilled
                 if (!newPostTitle.getText().toString().isEmpty() && !newPostContent.getText().toString().isEmpty()){
-
                     //checks if post is too large
                     if(newPostTitle.getText().toString().length() > 50 && newPostContent.getText().toString().length() > 200){
                         Toast.makeText(getContext(), "Post content or title too large.", Toast.LENGTH_SHORT).show();
@@ -203,7 +202,7 @@ public class ForumFragment extends Fragment {
                         StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("forum_images");
                         // checks if no image was attached to post
                         if(postImageUri == null){
-                            makePost("defaultPostImage");
+                            makePost("https://firebasestorage.googleapis.com/v0/b/infs3605-32bdc.appspot.com/o/forum_images%2Fpostbackground.jpg?alt=media&token=d18e2470-20af-4ea3-8c2b-68516c437f69");
                         } else {
                             //post with image
                             imageFilePath = storageReference.child(postImageUri.getLastPathSegment());
@@ -238,6 +237,9 @@ public class ForumFragment extends Fragment {
 
         if (currentUser.getPhotoUrl()!=null){
             Glide.with(this).load(currentUser.getPhotoUrl()).apply(RequestOptions.circleCropTransform()).into(newPostUserDp);
+        } else {
+            Glide.with(this).load("https://firebasestorage.googleapis.com/v0/b/infs3605-32bdc.appspot.com/o/userDps%2FdefaultUser.jpg?alt=media&token=d0ae4498-18f3-4195-a07f-e9ee351273e2 " )
+                    .apply(RequestOptions.circleCropTransform()).into(newPostUserDp);
         }
     }
 
@@ -251,12 +253,16 @@ public class ForumFragment extends Fragment {
         }
     }
     public void makePost(String image){
+        String userDp = "default";
+        if (currentUser.getPhotoUrl()!=null){
+            userDp = "https://firebasestorage.googleapis.com/v0/b/infs3605-32bdc.appspot.com/o/userDps%2FdefaultUser.jpg?alt=media&token=d0ae4498-18f3-4195-a07f-e9ee351273e2";
+        }
         Post post = new Post(newPostTitle.getText().toString()
                 ,newPostContent.getText().toString()
                 ,image
                 ,currentUser.getDisplayName()
                 ,currentUser.getUid()
-                ,currentUser.getPhotoUrl().toString());
+                ,userDp);
 
         //post object is added into firebase
         FirebaseDatabase mFireDatabase =  FirebaseDatabase.getInstance();
@@ -271,6 +277,9 @@ public class ForumFragment extends Fragment {
                 postPorgressBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(getContext(), "Post was posted.", Toast.LENGTH_SHORT).show();
                 popupCreatePost.dismiss();
+                newPostContent.setText("");
+                newPostTitle.setText("");
+                newPostPostImage.setImageResource(0);
             }
         });
     }

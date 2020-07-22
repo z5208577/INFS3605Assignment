@@ -249,8 +249,10 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             });
         } else {
+            Uri myUri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/infs3605-32bdc.appspot.com/o/userDps%2FdefaultUser.jpg?alt=media&token=d0ae4498-18f3-4195-a07f-e9ee351273e2");
             UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
                     .setDisplayName(nameInput)
+                    .setPhotoUri(myUri)
                     .build();
             user.updateProfile(profileUpdate);
         }

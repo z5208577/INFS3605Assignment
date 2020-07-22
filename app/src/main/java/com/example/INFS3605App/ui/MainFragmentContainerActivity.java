@@ -179,6 +179,9 @@ public class MainFragmentContainerActivity extends AppCompatActivity implements 
         drawerUserDp = navigationView.getHeaderView(0).findViewById(R.id.drawerUserDp);
         if (currentUser.getPhotoUrl()!=null){
             Glide.with(this).load(currentUser.getPhotoUrl()).apply(RequestOptions.circleCropTransform()).into(drawerUserDp);
+        } else {
+            Glide.with(this).load("https://firebasestorage.googleapis.com/v0/b/infs3605-32bdc.appspot.com/o/userDps%2FdefaultUser.jpg?alt=media&token=d0ae4498-18f3-4195-a07f-e9ee351273e2 " )
+                    .apply(RequestOptions.circleCropTransform()).into(drawerUserDp);
         }
 
         drawerUserEmail = navigationView.getHeaderView(0).findViewById(R.id.drawerUserEmail);

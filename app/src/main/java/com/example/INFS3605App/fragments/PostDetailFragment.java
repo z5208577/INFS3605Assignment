@@ -133,8 +133,13 @@ public class PostDetailFragment extends Fragment {
         commentContent = view.findViewById(R.id.commentContent);
         commentContent.addTextChangedListener(commentTextWatcher);
         commentUserDp = view.findViewById(R.id.commentUserDp);
-        Glide.with(this).load(mFirebaseUser.getPhotoUrl())
+        if (mFirebaseUser.getPhotoUrl()!=null) {
+            Glide.with(this).load(mFirebaseUser.getPhotoUrl())
                 .apply(RequestOptions.circleCropTransform()).into((commentUserDp));
+         } else {
+            Glide.with(this).load("https://firebasestorage.googleapis.com/v0/b/infs3605-32bdc.appspot.com/o/userDps%2FdefaultUser.jpg?alt=media&token=d0ae4498-18f3-4195-a07f-e9ee351273e2" )
+                    .apply(RequestOptions.circleCropTransform()).into(commentUserDp);
+        }
 
         addComment = view.findViewById(R.id.addComent);
         addComment.setOnClickListener(new View.OnClickListener() {
@@ -147,7 +152,12 @@ public class PostDetailFragment extends Fragment {
                         .push();
                 String commentInput = commentContent.getText().toString();
                 String userId = mFirebaseUser.getUid();
-                String userDp = mFirebaseUser.getPhotoUrl().toString();
+                String userDp;
+                if (mFirebaseUser.getPhotoUrl() != null){
+                    userDp = mFirebaseUser.getPhotoUrl().toString();
+                } else {
+                    userDp= "https://firebasestorage.googleapis.com/v0/b/infs3605-32bdc.appspot.com/o/userDps%2FdefaultUser.jpg?alt=media&token=d0ae4498-18f3-4195-a07f-e9ee351273e2";
+                }
                 String username = mFirebaseUser.getDisplayName();
                 Comment comment = new Comment(commentInput,userId,userDp,username);
                 commentReference.setValue(comment).addOnSuccessListener(new OnSuccessListener<Void>() {
