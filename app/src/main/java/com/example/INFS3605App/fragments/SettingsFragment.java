@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -38,6 +39,7 @@ import com.example.INFS3605App.utils.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -63,6 +65,7 @@ public class SettingsFragment extends Fragment {
     private Uri userDpUri = null;
     public StorageReference imageFilePath;
     public FirebaseDatabase mFireDatabase;
+    public NavigationView navigationView;
     public DatabaseReference mUserDatabaseReference;
     public SettingsFragment() {
         // Required empty public constructor
@@ -86,8 +89,12 @@ public class SettingsFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_settings, container, false);
         mFirebaseAuth = FirebaseAuth.getInstance();
         currentUser = mFirebaseAuth.getCurrentUser();
+        final AppCompatActivity activity = (AppCompatActivity) view.getContext();
         mFireDatabase = FirebaseDatabase.getInstance();
         mUserDatabaseReference = mFireDatabase.getReference("Users");
+        navigationView = activity.findViewById(R.id.nav_view);
+        navigationView.getMenu().findItem(R.id.drawer_home).setChecked(true);
+        navigationView.getMenu().findItem(R.id.drawer_settings).setChecked(false);
 
 
         settingsCompanyCode = view.findViewById(R.id.settingsCompanyCode);

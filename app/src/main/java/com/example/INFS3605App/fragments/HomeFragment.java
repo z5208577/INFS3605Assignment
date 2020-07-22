@@ -51,9 +51,9 @@ public class HomeFragment extends Fragment {
         final AppCompatActivity activity = (AppCompatActivity) view.getContext();
         mBottomNavigationView= activity.findViewById(R.id.bottomNavigationView);
         enableCheckedItems(mBottomNavigationView);
-        navigationView = activity.findViewById(R.id.nav_view);
-        navigationView.getMenu().clear();
+        navigationView = activity.findViewById(R.id.nav_view);;
         navigationView.getMenu().findItem(R.id.drawer_home).setChecked(true);
+        navigationView.getMenu().findItem(R.id.drawer_settings).setChecked(false);
         mBottomNavigationView.getMenu().findItem(R.id.bottomHome).setChecked(true);
         alerts = view.findViewById(R.id.alerts);
         alerts.setOnClickListener(new View.OnClickListener() {
