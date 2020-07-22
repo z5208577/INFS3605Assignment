@@ -18,6 +18,17 @@ public class Post {
         company = "Test Company";
     }
 
+    public Post(String title, String content, String image, String user, String userId, String userDp, String company) {
+        this.title = title;
+        this.content = content;
+        this.image = image;
+        this.user = user;
+        this.userId = userId;
+        this.userDp = userDp;
+        this.company = company;
+        this.timeStamp = ServerValue.TIMESTAMP;
+    }
+
     public Post(){
 
     }

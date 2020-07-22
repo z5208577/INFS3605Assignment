@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.INFS3605App.R;
+import com.example.INFS3605App.utils.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -38,13 +39,15 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.UUID;
+
 public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = RegisterActivity.class.getName();
-    public EditText name, email, password, confirmPassword;
-    public String nameInput, emailInput, passwordInput, confirmPasswordInput;
+    public EditText name, email, password, confirmPassword, companyCode;
+    public String nameInput, emailInput, passwordInput, confirmPasswordInput, companyCodeInput;
     public int reqCode;
-    public Button createUser;
-    public ImageView userDp;
+    public Button createUser, generateCode;
+    public ImageView userDp, codeInfo;
     public Uri userDpURI;
     FirebaseAuth mFirebaseAuth;
     FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -95,15 +98,27 @@ public class RegisterActivity extends AppCompatActivity {
 
 
         name =findViewById(R.id.name);
-        name.addTextChangedListener(loginTextWatcher);
+        name.addTextChangedListener(registerTextWatcher);
 
 
         email = findViewById(R.id.forgottenPassEmail);
-        email.addTextChangedListener(loginTextWatcher);
+        email.addTextChangedListener(registerTextWatcher);
         password = findViewById(R.id.password);
-        password.addTextChangedListener(loginTextWatcher);
+        password.addTextChangedListener(registerTextWatcher);
         confirmPassword = findViewById(R.id.confirmPassword);
-        confirmPassword.addTextChangedListener(loginTextWatcher);
+        confirmPassword.addTextChangedListener(registerTextWatcher);
+        companyCode = findViewById(R.id.companyCode);
+        companyCode.addTextChangedListener(registerTextWatcher);
+        codeInfo = findViewById(R.id.codeInfo);
+        codeInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(RegisterActivity.this, "This code is used to access your relevant discussion forum. " +
+                        "Ask for it from your manager or create one yourself and distribute it amongst employees", Toast.LENGTH_LONG).show();
+
+            }
+        });
+
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -119,6 +134,14 @@ public class RegisterActivity extends AppCompatActivity {
 
             }
         };
+
+        generateCode =findViewById(R.id.generateCode);
+        generateCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                companyCode.setText(UUID.randomUUID().toString());
+            }
+        });
 
         //firebase implementation
         createUser = findViewById(R.id.createUser);
@@ -175,9 +198,13 @@ public class RegisterActivity extends AppCompatActivity {
 
                                     }
                                 });
-                                //User newUser = new User(nameInput);
-                                //mDatabaseReference.child(user.getUid()).setValue(newUser);
-                                //Log.d(TAG, "User added");
+                                User newUser = new User(user.getUid(),companyCodeInput);
+                                FirebaseDatabase mFireDatabase =  FirebaseDatabase.getInstance();
+                                DatabaseReference myRef = mFireDatabase
+                                        .getReference("Users")
+                                        .child(user.getUid());
+                                myRef.setValue(newUser);
+                                Log.d(TAG, "User added");
                                 Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                                 RegisterActivity.this.startActivity(intent);
                                 mFirebaseAuth.signOut();
@@ -206,7 +233,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
     //prevents users from logging in without filling in textfields
-    private TextWatcher loginTextWatcher = new TextWatcher() {
+    private TextWatcher registerTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -218,8 +245,13 @@ public class RegisterActivity extends AppCompatActivity {
             emailInput = email.getText().toString().trim();
             passwordInput = password.getText().toString().trim();
             confirmPasswordInput = confirmPassword.getText().toString().trim();
+            companyCodeInput = companyCode.getText().toString().trim();
 
-            createUser.setEnabled(!nameInput.isEmpty() && !emailInput.isEmpty() && !passwordInput.isEmpty() && !confirmPasswordInput.isEmpty());
+            createUser.setEnabled(!nameInput.isEmpty()
+                    && !emailInput.isEmpty()
+                    && !passwordInput.isEmpty()
+                    && !confirmPasswordInput.isEmpty()
+                    && !companyCodeInput.isEmpty());
         }
 
         @Override

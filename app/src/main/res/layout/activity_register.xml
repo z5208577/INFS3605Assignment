@@ -66,12 +66,37 @@
         android:hint="Confirm your password"
         android:inputType="textPassword" />
 
+    <EditText
+        android:id="@+id/companyCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/confirmPassword"
+        android:ems="10"
+        android:hint="Generate or enter your company's code"
+        android:inputType="textPersonName" />
+
     <Button
         android:id="@+id/createUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/confirmPassword"
+        android:layout_below="@id/companyCode"
         android:enabled="false"
         android:text="Create User" />
+
+    <ImageView
+        android:id="@+id/codeInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_below="@id/confirmPassword"
+        android:layout_toRightOf="@id/companyCode"
+        app:srcCompat="@drawable/ic_help_outline_black_24dp" />
+
+    <Button
+        android:id="@+id/generateCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/confirmPassword"
+        android:layout_toRightOf="@id/codeInfo"
+        android:text="Generate Company Code" />
 
 </RelativeLayout>

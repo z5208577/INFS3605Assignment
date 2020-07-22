@@ -21,6 +21,8 @@ import com.google.android.material.navigation.NavigationView;
 public class HomeFragment extends Fragment {
     public ImageView alerts, discussion, worldnews, plans, restrictions, map, businessConnect;
     public BottomNavigationView mBottomNavigationView;
+    public NavigationView navigationView;
+
 
 
     public HomeFragment() {
@@ -49,6 +51,9 @@ public class HomeFragment extends Fragment {
         final AppCompatActivity activity = (AppCompatActivity) view.getContext();
         mBottomNavigationView= activity.findViewById(R.id.bottomNavigationView);
         enableCheckedItems(mBottomNavigationView);
+        navigationView = activity.findViewById(R.id.nav_view);
+        navigationView.getMenu().clear();
+        navigationView.getMenu().findItem(R.id.drawer_home).setChecked(true);
         mBottomNavigationView.getMenu().findItem(R.id.bottomHome).setChecked(true);
         alerts = view.findViewById(R.id.alerts);
         alerts.setOnClickListener(new View.OnClickListener() {

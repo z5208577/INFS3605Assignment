@@ -49,7 +49,7 @@ public class PostAdapter extends  RecyclerView.Adapter<PostAdapter.MyViewHolder>
         if(!mData.get(position).getImage().equals("defaultPostImage")){
             Glide.with(mContext).load(mData.get(position).getImage()).into(holder.postImage);
         }
-        if (mData.get(position).getUserDp().equals("default")){
+        if (!mData.get(position).getUserDp().equals("default")){
             Glide.with(mContext).load(mData.get(position).getUserDp()).apply(RequestOptions.circleCropTransform()).into(holder.postUserDp);
         } else {
             Glide.with(mContext).load("https://firebasestorage.googleapis.com/v0/b/infs3605-32bdc.appspot.com/o/userDps%2FdefaultUser.jpg?alt=media&token=d0ae4498-18f3-4195-a07f-e9ee351273e2")
@@ -79,7 +79,6 @@ public class PostAdapter extends  RecyclerView.Adapter<PostAdapter.MyViewHolder>
                     int position = getAdapterPosition();
                     AppCompatActivity activity = (AppCompatActivity) view.getContext();
                     PostDetailFragment postDetailFragment= new PostDetailFragment();
-
 
                     Bundle args = new Bundle();
                     args.putString("postTitle", mData.get(position).getTitle());

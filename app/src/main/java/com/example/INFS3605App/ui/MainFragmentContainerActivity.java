@@ -31,6 +31,7 @@ import com.example.INFS3605App.fragments.ForumFragment;
 import com.example.INFS3605App.fragments.MapFragment;
 import com.example.INFS3605App.fragments.RestrictionsFragment;
 import com.example.INFS3605App.fragments.HomeFragment;
+import com.example.INFS3605App.fragments.SettingsFragment;
 import com.example.INFS3605App.fragments.WorldCrisisNews;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
@@ -79,6 +80,7 @@ public class MainFragmentContainerActivity extends AppCompatActivity implements 
             Bundle arguments = new Bundle();
             fragment.setArguments(arguments);
             transaction.replace(R.id.mainFragment,fragment);
+            transaction.addToBackStack(null);
             transaction.commit();
             navigationView.setCheckedItem(R.id.drawer_home);
         }
@@ -118,7 +120,9 @@ public class MainFragmentContainerActivity extends AppCompatActivity implements 
                     break;
             }
             getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment,
-                    fragment).commit();
+                    fragment)
+                    .addToBackStack(null)
+                    .commit();
             return true;
         }
     };
@@ -130,8 +134,19 @@ public class MainFragmentContainerActivity extends AppCompatActivity implements 
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.mainFragment, new HomeFragment())
+                        .addToBackStack(null)
                         .commit();
+                navigationView.getMenu().findItem(R.id.drawer_home).setChecked(true);
                 bottomNavigationView.setSelectedItemId(R.id.bottomHome);
+                break;
+            case R.id.drawer_settings:
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.mainFragment, new SettingsFragment())
+                        .addToBackStack(null)
+                        .commit();
+                navigationView.getMenu().findItem(R.id.drawer_settings).setChecked(true);
+                bottomNavigationView.getMenu().setGroupCheckable(0, false, true);
                 break;
             case R.id.logout:
                 Intent intent = new Intent(MainFragmentContainerActivity.this, MainActivity.class);

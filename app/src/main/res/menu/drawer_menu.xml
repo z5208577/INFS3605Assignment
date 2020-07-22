@@ -4,8 +4,11 @@
     tools:showIn="navigation_view">
     <group android:checkableBehavior="single">
         <item android:id="@+id/drawer_home"
-            android:icon="@drawable/ic_home_black_24dp"
-            android:title="Home"/>
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="Home"/>
+        <item android:id="@+id/drawer_settings"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="Settings"/>
     </group>
 
     <item android:title="Menu">

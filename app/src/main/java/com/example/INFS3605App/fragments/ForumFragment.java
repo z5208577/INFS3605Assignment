@@ -17,12 +17,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -36,6 +32,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.INFS3605App.R;
 import com.example.INFS3605App.adapters.PostAdapter;
 import com.example.INFS3605App.utils.Post;
+import com.example.INFS3605App.utils.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -63,16 +60,16 @@ import static android.app.Activity.RESULT_OK;
 public class ForumFragment extends Fragment {
     Dialog popupCreatePost;
     public ImageView newPostUserDp, newPostPostImage, createPost;
-    public TextView newPostTitle, newPostContent;
+    public TextView newPostTitle, newPostContent,prompt;
     public FirebaseUser currentUser;
     public FirebaseAuth mFirebaseAuth;
     private Uri postImageUri = null;
-    public ProgressBar postPorgressBar;
+    public ProgressBar forumProgressBar, postPorgressBar;
     public StorageReference imageFilePath;
     public RecyclerView postRecyclerView;
     public PostAdapter postAdapter;
     public FirebaseDatabase mFireDatabase;
-    public DatabaseReference mDatabaseReference;
+    public DatabaseReference mPostDatabaseReference, mUserDatabaseReference;
     public List<Post> mPosts;
 
 
@@ -100,7 +97,8 @@ public class ForumFragment extends Fragment {
        mFirebaseAuth = FirebaseAuth.getInstance();
        currentUser = mFirebaseAuth.getCurrentUser();
        mFireDatabase = FirebaseDatabase.getInstance();
-       mDatabaseReference = mFireDatabase.getReference("Posts");
+       mPostDatabaseReference = mFireDatabase.getReference("Posts");
+       mUserDatabaseReference = mFireDatabase.getReference("Users");
        popupCreatePost = new Dialog(this.getContext());
        initiatePopup();
        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.createPost);
@@ -110,9 +108,12 @@ public class ForumFragment extends Fragment {
                popupCreatePost.show();
            }
        });
-
+       prompt = view.findViewById(R.id.prompt);
+       prompt.setVisibility(View.INVISIBLE);
        postRecyclerView = view.findViewById(R.id.postRecyclerView);
        postRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+       forumProgressBar = view.findViewById(R.id.forumProgressBar);
+       forumProgressBar.setVisibility(View.VISIBLE);
 
 
        return view;
@@ -122,22 +123,43 @@ public class ForumFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        //gets post from database
-        mDatabaseReference.addValueEventListener(new ValueEventListener() {
+        mUserDatabaseReference = FirebaseDatabase.getInstance()
+                .getReference("Users")
+                .child(currentUser.getUid())
+                .child("companyId");
+        mUserDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                mPosts = new ArrayList<>();
-                for (DataSnapshot postSnap: snapshot.getChildren()){
-                    Post post = postSnap.getValue(Post.class);
-                    mPosts.add(post);
-                }
-                postAdapter = new PostAdapter(getActivity(),mPosts);
-                postRecyclerView.setAdapter(postAdapter);
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                final String companyId = dataSnapshot.getValue(String.class);
+
+                mPostDatabaseReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        mPosts = new ArrayList<>();
+                        for (DataSnapshot postSnap: snapshot.getChildren()){
+                            Post post = postSnap.getValue(Post.class);
+                            if (post.getCompany().equals(companyId))
+                                mPosts.add(post);
+                        }
+                        if (mPosts.size() ==0){
+                            prompt.setVisibility(View.VISIBLE);
+                        } else {
+                            prompt.setVisibility(View.INVISIBLE);
+
+                        }
+                        forumProgressBar.setVisibility(View.INVISIBLE);
+                        postAdapter = new PostAdapter(getActivity(),mPosts);
+                        postRecyclerView.setAdapter(postAdapter);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+            public void onCancelled(DatabaseError databaseError) {
             }
         });
     }
@@ -149,7 +171,6 @@ public class ForumFragment extends Fragment {
         popupCreatePost.getWindow().setBackgroundDrawable(new ColorDrawable((Color.TRANSPARENT)));
         popupCreatePost.getWindow().setLayout(Toolbar.LayoutParams.MATCH_PARENT,Toolbar.LayoutParams.WRAP_CONTENT);
         popupCreatePost.getWindow().getAttributes().gravity= Gravity.TOP;
-
 
         newPostUserDp= popupCreatePost.findViewById(R.id.newpost_userDp);
         postPorgressBar = popupCreatePost.findViewById(R.id.postProgressBar);
@@ -184,7 +205,6 @@ public class ForumFragment extends Fragment {
         });
         newPostTitle = popupCreatePost.findViewById(R.id.newpost_title);
         newPostContent = popupCreatePost.findViewById(R.id.newpost_content);
-
 
         createPost = popupCreatePost.findViewById(R.id.newpost_post);
         createPost.setOnClickListener(new View.OnClickListener() {
@@ -252,36 +272,50 @@ public class ForumFragment extends Fragment {
 
         }
     }
-    public void makePost(String image){
-        String userDp = "default";
-        if (currentUser.getPhotoUrl()!=null){
+    public void makePost(final String image){
+        final String userDp;
+        if (currentUser.getPhotoUrl()==null){
             userDp = "https://firebasestorage.googleapis.com/v0/b/infs3605-32bdc.appspot.com/o/userDps%2FdefaultUser.jpg?alt=media&token=d0ae4498-18f3-4195-a07f-e9ee351273e2";
+        } else {
+            userDp = currentUser.getPhotoUrl().toString();
         }
-        Post post = new Post(newPostTitle.getText().toString()
-                ,newPostContent.getText().toString()
-                ,image
-                ,currentUser.getDisplayName()
-                ,currentUser.getUid()
-                ,userDp);
-
-        //post object is added into firebase
-        FirebaseDatabase mFireDatabase =  FirebaseDatabase.getInstance();
-        DatabaseReference myRef = mFireDatabase.getReference("Posts").push();
-        String key = myRef.getKey();
-        post.setPostId(key);
-
-        myRef.setValue(post).addOnSuccessListener(new OnSuccessListener<Void>() {
+        mUserDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onSuccess(Void aVoid) {
-                createPost.setVisibility(View.VISIBLE);
-                postPorgressBar.setVisibility(View.INVISIBLE);
-                Toast.makeText(getContext(), "Post was posted.", Toast.LENGTH_SHORT).show();
-                popupCreatePost.dismiss();
-                newPostContent.setText("");
-                newPostTitle.setText("");
-                newPostPostImage.setImageResource(0);
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+               final String companyId = snapshot.getValue(String.class);
+                Post post = new Post(newPostTitle.getText().toString()
+                        ,newPostContent.getText().toString()
+                        ,image
+                        ,currentUser.getDisplayName()
+                        ,currentUser.getUid()
+                        , userDp
+                        ,companyId);
+
+
+                //post object is added into firebase
+                FirebaseDatabase mFireDatabase =  FirebaseDatabase.getInstance();
+                DatabaseReference myRef = mFireDatabase.getReference("Posts").push();
+                String key = myRef.getKey();
+                post.setPostId(key);
+
+                myRef.setValue(post).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        createPost.setVisibility(View.VISIBLE);
+                        postPorgressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(getContext(), "Post was posted.", Toast.LENGTH_SHORT).show();
+                        popupCreatePost.dismiss();
+                        newPostContent.setText("");
+                        newPostTitle.setText("");
+                        newPostPostImage.setImageResource(0);
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }
-
 }
