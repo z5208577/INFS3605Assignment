@@ -57,8 +57,11 @@
         android:layout_marginEnd="7dp"
         android:layout_marginRight="7dp"
         android:layout_marginBottom="8dp"
+        android:background="#039BE5"
         android:enabled="false"
-        android:text="Sign In" />
+        android:text="Sign In"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/register"
