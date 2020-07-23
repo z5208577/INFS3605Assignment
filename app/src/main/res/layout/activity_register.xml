@@ -123,7 +123,7 @@
         android:layout_marginEnd="37dp"
         android:layout_marginRight="37dp"
         android:text="Welcome To CMC"
-        android:textColor="#16226A"
+        android:textColor="#1B59B6"
         android:textSize="32sp"
         android:textStyle="bold" />
 
