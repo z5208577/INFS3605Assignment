@@ -4,23 +4,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#03A9F4"
     tools:context="com.example.INFS3605App.ui.RegisterActivity">
 
     <TextView
         android:id="@+id/A"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New User" />
+        android:text="Welcome To CMC"
+        android:textColor="@android:color/white"
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="98dp"
+        android:layout_height="96dp"
         android:layout_below="@id/A"
-        app:cardCornerRadius="40dp"
+        android:layout_alignEnd="@+id/forgottenPassEmail"
+        android:layout_alignRight="@+id/forgottenPassEmail"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="150dp"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="65dp"
+        android:layout_marginRight="65dp"
         android:innerRadius="0dp"
         android:shape="ring"
-        android:thicknessRatio="1.9">
+        android:thicknessRatio="1.9"
+        app:cardCornerRadius="40dp">
 
         <ImageView
             android:id="@+id/userDp"
@@ -35,6 +48,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/cardView"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="15dp"
         android:ems="10"
         android:hint="Full Name"
         android:inputType="textPersonName" />
@@ -44,6 +59,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/name"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="15dp"
         android:ems="10"
         android:hint="Please enter a valid email address"
         android:inputType="textPersonName" />
@@ -53,6 +70,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/forgottenPassEmail"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="15dp"
         android:ems="10"
         android:hint="Enter a password"
         android:inputType="textPassword" />
@@ -62,6 +81,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/password"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="15dp"
         android:ems="10"
         android:hint="Confirm your password"
         android:inputType="textPassword" />
@@ -71,15 +92,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/confirmPassword"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="15dp"
         android:ems="10"
-        android:hint="Generate or enter your company's code"
+        android:hint="Company Code"
         android:inputType="textPersonName" />
 
     <Button
         android:id="@+id/createUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/companyCode"
+        android:layout_below="@id/generateCode"
+        android:layout_marginLeft="150dp"
+        android:background="@android:color/holo_red_light"
         android:enabled="false"
         android:text="Create User" />
 
@@ -88,6 +113,7 @@
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_below="@id/confirmPassword"
+        android:layout_marginTop="15dp"
         android:layout_toRightOf="@id/companyCode"
         app:srcCompat="@drawable/ic_help_outline_black_24dp" />
 
@@ -95,8 +121,9 @@
         android:id="@+id/generateCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/confirmPassword"
-        android:layout_toRightOf="@id/codeInfo"
+        android:layout_below="@id/companyCode"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="15dp"
         android:text="Generate Company Code" />
 
 </RelativeLayout>
