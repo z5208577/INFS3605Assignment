@@ -58,11 +58,11 @@
 
     <TextView
         android:id="@+id/textView10"
-        android:layout_width="413dp"
-        android:layout_height="41dp"
+        android:layout_width="391dp"
+        android:layout_height="48dp"
         android:layout_marginTop="20dp"
         android:background="#2F1792FF"
-        android:text="Industry"
+        android:text="Industry ex. Beauty, nail waxing etc...."
         android:textColor="#000000"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -71,12 +71,15 @@
 
     <TextView
         android:id="@+id/textView11"
-        android:layout_width="291dp"
-        android:layout_height="406dp"
+        android:layout_width="247dp"
+        android:layout_height="169dp"
         android:layout_marginBottom="40dp"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.42"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView10"
+        app:layout_constraintVertical_bias="0.141" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
