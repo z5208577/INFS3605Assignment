@@ -61,7 +61,7 @@
         android:layout_width="413dp"
         android:layout_height="41dp"
         android:layout_marginTop="20dp"
-        android:background="#B798C7F4"
+        android:background="#2F1792FF"
         android:text="Industry"
         android:textColor="#000000"
         android:textSize="18sp"
