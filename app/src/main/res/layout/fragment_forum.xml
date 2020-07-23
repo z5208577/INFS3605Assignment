@@ -7,19 +7,10 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <ProgressBar
-        android:id="@+id/forumProgressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/postRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
-    </androidx.recyclerview.widget.RecyclerView>
+        android:layout_height="match_parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/createPost"
@@ -28,14 +19,5 @@
         android:layout_gravity="bottom|right"
         android:clickable="true"
         app:srcCompat="@drawable/ic_create_black_24dp" />
-
-    <TextView
-        android:id="@+id/prompt"
-        android:layout_width="198dp"
-        android:layout_height="54dp"
-        android:layout_gravity="bottom|center_horizontal"
-        android:gravity="center"
-        android:text="Be the first to post in your organisations forum! Press the floating icon to the right!"
-        android:textStyle="bold" />
 
 </FrameLayout>

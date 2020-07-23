@@ -30,8 +30,7 @@ tools:context="com.example.INFS3605App.fragments.HomeFragment">
                 android:src="@drawable/common_google_signin_btn_icon_light"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/cmclogo" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tvHeading"

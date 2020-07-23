@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
         // method for password recovery, mostly done through firebase
         forgotPassword = findViewById(R.id.forgotPassword);
         SpannableString forgotPass = new SpannableString("Forgotten your password? Reset it here.");
-        forgotPass.setSpan(new UnderlineSpan(), 0, forgotPass.length(), 0);
+        forgotPass.setSpan(new UnderlineSpan(), 0, content.length(), 0);
         forgotPassword.setText(forgotPass);
         forgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override

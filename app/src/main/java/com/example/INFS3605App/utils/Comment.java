@@ -14,7 +14,7 @@ public class Comment {
         this.userId = userId;
         UserDp = userDp;
         this.username = username;
-        this.timestamp = ServerValue.TIMESTAMP;
+        this.timestamp = ServerValue.TIMESTAMP;;
     }
 
     public String getContent() {

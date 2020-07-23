@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.INFS3605App.R;
-import com.example.INFS3605App.utils.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -39,15 +38,13 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.util.UUID;
-
 public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = RegisterActivity.class.getName();
-    public EditText name, email, password, confirmPassword, companyCode;
-    public String nameInput, emailInput, passwordInput, confirmPasswordInput, companyCodeInput;
+    public EditText name, email, password, confirmPassword;
+    public String nameInput, emailInput, passwordInput, confirmPasswordInput;
     public int reqCode;
-    public Button createUser, generateCode;
-    public ImageView userDp, codeInfo;
+    public Button createUser;
+    public ImageView userDp;
     public Uri userDpURI;
     FirebaseAuth mFirebaseAuth;
     FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -98,27 +95,15 @@ public class RegisterActivity extends AppCompatActivity {
 
 
         name =findViewById(R.id.name);
-        name.addTextChangedListener(registerTextWatcher);
+        name.addTextChangedListener(loginTextWatcher);
 
 
         email = findViewById(R.id.forgottenPassEmail);
-        email.addTextChangedListener(registerTextWatcher);
+        email.addTextChangedListener(loginTextWatcher);
         password = findViewById(R.id.password);
-        password.addTextChangedListener(registerTextWatcher);
+        password.addTextChangedListener(loginTextWatcher);
         confirmPassword = findViewById(R.id.confirmPassword);
-        confirmPassword.addTextChangedListener(registerTextWatcher);
-        companyCode = findViewById(R.id.companyCode);
-        companyCode.addTextChangedListener(registerTextWatcher);
-        codeInfo = findViewById(R.id.codeInfo);
-        codeInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(RegisterActivity.this, "This code is used to access your relevant discussion forum. " +
-                        "Ask for it from your manager or create one yourself and distribute it amongst employees", Toast.LENGTH_LONG).show();
-
-            }
-        });
-
+        confirmPassword.addTextChangedListener(loginTextWatcher);
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -134,14 +119,6 @@ public class RegisterActivity extends AppCompatActivity {
 
             }
         };
-
-        generateCode =findViewById(R.id.generateCode);
-        generateCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                companyCode.setText(UUID.randomUUID().toString());
-            }
-        });
 
         //firebase implementation
         createUser = findViewById(R.id.createUser);
@@ -198,13 +175,9 @@ public class RegisterActivity extends AppCompatActivity {
 
                                     }
                                 });
-                                User newUser = new User(user.getUid(),companyCodeInput);
-                                FirebaseDatabase mFireDatabase =  FirebaseDatabase.getInstance();
-                                DatabaseReference myRef = mFireDatabase
-                                        .getReference("Users")
-                                        .child(user.getUid());
-                                myRef.setValue(newUser);
-                                Log.d(TAG, "User added");
+                                //User newUser = new User(nameInput);
+                                //mDatabaseReference.child(user.getUid()).setValue(newUser);
+                                //Log.d(TAG, "User added");
                                 Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                                 RegisterActivity.this.startActivity(intent);
                                 mFirebaseAuth.signOut();
@@ -233,7 +206,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
     //prevents users from logging in without filling in textfields
-    private TextWatcher registerTextWatcher = new TextWatcher() {
+    private TextWatcher loginTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -245,13 +218,8 @@ public class RegisterActivity extends AppCompatActivity {
             emailInput = email.getText().toString().trim();
             passwordInput = password.getText().toString().trim();
             confirmPasswordInput = confirmPassword.getText().toString().trim();
-            companyCodeInput = companyCode.getText().toString().trim();
 
-            createUser.setEnabled(!nameInput.isEmpty()
-                    && !emailInput.isEmpty()
-                    && !passwordInput.isEmpty()
-                    && !confirmPasswordInput.isEmpty()
-                    && !companyCodeInput.isEmpty());
+            createUser.setEnabled(!nameInput.isEmpty() && !emailInput.isEmpty() && !passwordInput.isEmpty() && !confirmPasswordInput.isEmpty());
         }
 
         @Override
@@ -281,10 +249,8 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             });
         } else {
-            Uri myUri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/infs3605-32bdc.appspot.com/o/userDps%2FdefaultUser.jpg?alt=media&token=d0ae4498-18f3-4195-a07f-e9ee351273e2");
             UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
                     .setDisplayName(nameInput)
-                    .setPhotoUri(myUri)
                     .build();
             user.updateProfile(profileUpdate);
         }
