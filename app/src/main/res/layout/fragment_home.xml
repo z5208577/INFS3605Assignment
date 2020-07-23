@@ -27,7 +27,7 @@ tools:context="com.example.INFS3605App.fragments.HomeFragment">
                 android:layout_marginTop="3dp"
                 android:layout_marginBottom="3dp"
                 android:layout_weight="1"
-                android:src="@drawable/common_google_signin_btn_icon_light"
+                android:src="@drawable/logo"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -139,7 +139,7 @@ tools:context="com.example.INFS3605App.fragments.HomeFragment">
                 android:layout_marginBottom="3dp"
                 android:text="Company Discussion"
 
-                android:textSize="18sp"
+                android:textSize="16sp"
 
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -170,7 +170,7 @@ tools:context="com.example.INFS3605App.fragments.HomeFragment">
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="3dp"
                 android:text="World Crisis News"
-                android:textSize="18sp"
+                android:textSize="16sp"
 
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -190,7 +190,8 @@ tools:context="com.example.INFS3605App.fragments.HomeFragment">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:background="#FFFFFF">
 
         <ImageButton
             android:id="@+id/plans"
@@ -214,7 +215,7 @@ tools:context="com.example.INFS3605App.fragments.HomeFragment">
             android:layout_height="wrap_content"
             android:layout_marginBottom="3dp"
             android:text="Crisis Plans"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/plans"
@@ -242,7 +243,7 @@ tools:context="com.example.INFS3605App.fragments.HomeFragment">
             android:layout_height="wrap_content"
             android:layout_marginBottom="3dp"
             android:text="Crisis Restrictions"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/restrictions"
@@ -261,7 +262,8 @@ tools:context="com.example.INFS3605App.fragments.HomeFragment">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:background="#FFFFFF">
 
         <ImageButton
             android:id="@+id/map"
@@ -284,7 +286,7 @@ tools:context="com.example.INFS3605App.fragments.HomeFragment">
             android:layout_height="wrap_content"
             android:layout_marginBottom="3dp"
             android:text="Business Connect"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/businessConnect"
@@ -313,7 +315,7 @@ tools:context="com.example.INFS3605App.fragments.HomeFragment">
             android:layout_height="wrap_content"
             android:layout_marginBottom="3dp"
             android:text="Crisis Map"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/map"
