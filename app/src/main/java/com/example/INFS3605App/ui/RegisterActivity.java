@@ -208,6 +208,8 @@ public class RegisterActivity extends AppCompatActivity {
                                 Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                                 RegisterActivity.this.startActivity(intent);
                                 mFirebaseAuth.signOut();
+                                Toast.makeText(RegisterActivity.this, "Check your inbox for the verification email", Toast.LENGTH_SHORT).show();
+
                             }
                         }
                     });
