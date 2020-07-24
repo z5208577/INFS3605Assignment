@@ -59,7 +59,7 @@
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
         android:layout_marginBottom="14dp"
-        android:background="#E2DF2626"
+        android:background="#8BC34A"
         android:enabled="false"
         android:text="Sign In"
         android:textColor="#FFFFFF"
@@ -82,7 +82,7 @@
         android:layout_marginEnd="88dp"
         android:layout_marginRight="88dp"
         android:text="New here? Register!"
-        android:textColor="#1B59B6"
+        android:textColor="#002E5C"
         android:textStyle="italic" />
 
     <Button
@@ -100,7 +100,7 @@
         android:layout_marginEnd="77dp"
         android:layout_marginRight="77dp"
         android:layout_marginBottom="199dp"
-        android:background="#1B69B6"
+        android:background="#002E5C"
         android:text="Resend Code"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
@@ -158,6 +158,6 @@
         android:layout_marginEnd="41dp"
         android:layout_marginRight="41dp"
         android:text="Forgot your password? Reset it here."
-        android:textColor="#1B59B6"
+        android:textColor="#002E5C"
         android:textStyle="italic" />
 </RelativeLayout>
