@@ -55,7 +55,7 @@
                 android:layout_alignStart="@+id/title"
                 android:layout_alignRight="@+id/layoutDate"
                 android:layout_alignTop="@+id/layoutDate"
-                android:layout_alignEnc="@+id/layoutDate" />
+                android:layout_alignEnd="@+id/layoutDate" />
 
             <FrameLayout
                 android:id="@+id/layoutDate"

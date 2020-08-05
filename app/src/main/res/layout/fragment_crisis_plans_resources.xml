@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/button7"
+        android:id="@+id/finansupp"
         android:layout_width="284dp"
         android:layout_height="60dp"
         android:layout_marginStart="7dp"
@@ -20,18 +20,21 @@
         app:layout_constraintVertical_bias="0.614" />
 
     <Button
-        android:id="@+id/button6"
+        android:id="@+id/safetyPlans"
         android:layout_width="284dp"
         android:layout_height="60dp"
+        android:layout_marginTop="95dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
+        android:layout_marginBottom="88dp"
         android:background="#E7F1FF"
         android:text="SAFETY PLANS"
         android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/finansupp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.647"
         app:layout_constraintStart_toEndOf="@+id/imageView13"
-        tools:layout_editor_absoluteY="263dp" />
+        app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
     <ImageView
         android:id="@+id/imageView11"
@@ -50,20 +53,22 @@
         android:layout_height="61dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginBottom="252dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/finansupp"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/finansupp"
         app:srcCompat="@drawable/money" />
 
     <ImageView
         android:id="@+id/imageView13"
         android:layout_width="78dp"
         android:layout_height="74dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginBottom="88dp"
-        app:layout_constraintBottom_toTopOf="@+id/imageView12"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="88dp"
+        app:layout_constraintBottom_toBottomOf="@+id/safetyPlans"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/safetyPlans"
+        app:layout_constraintVertical_bias="0.862"
         app:srcCompat="@drawable/insurance" />
 
     <TextView
