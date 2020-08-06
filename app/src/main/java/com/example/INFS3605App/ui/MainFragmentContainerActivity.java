@@ -115,8 +115,12 @@ public class MainFragmentContainerActivity extends AppCompatActivity implements 
                     break;
 
                 case R.id.bottomCrisisMap:
+
                     fragment = new MapFragment();
                     navigationView.getMenu().setGroupCheckable(0, false, true);
+
+
+                    Toast.makeText(getApplicationContext(), "This feature will be comming soon", Toast.LENGTH_SHORT).show();
                     break;
             }
             getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment,

@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.INFS3605App.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -100,7 +101,7 @@ public class HomeFragment extends Fragment {
                 AppCompatActivity activity = (AppCompatActivity) view.getContext();
                 PlanFragment planFragment = new PlanFragment();
                 activity.getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.mainFragment, planFragment, "postDetailFragment")
+                        .replace(R.id.mainFragment, planFragment, "planFragment")
                         .addToBackStack(null)
                         .commit();
                 clearCheckedItems(mBottomNavigationView);
@@ -112,9 +113,9 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 AppCompatActivity activity = (AppCompatActivity) view.getContext();
-                PlanFragment planFragment= new PlanFragment();
+                RestrictionsFragment restrictionsFragment= new RestrictionsFragment();
                 activity.getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.mainFragment, planFragment, "postDetailFragment")
+                        .replace(R.id.mainFragment, restrictionsFragment, "restrictionsFragment")
                         .addToBackStack(null)
                         .commit();
                 mBottomNavigationView.getMenu().findItem(R.id.bottomCrisisRestrictions).setChecked(true);
@@ -124,6 +125,7 @@ public class HomeFragment extends Fragment {
         map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*
                 AppCompatActivity activity = (AppCompatActivity) view.getContext();
                 MapFragment mapFragment = new MapFragment();
                 activity.getSupportFragmentManager().beginTransaction()
@@ -131,6 +133,9 @@ public class HomeFragment extends Fragment {
                         .addToBackStack(null)
                         .commit();
                 mBottomNavigationView.getMenu().findItem(R.id.bottomCrisisMap).setChecked(true);
+                */
+                Toast.makeText(getContext(), "This feature will be comming soon", Toast.LENGTH_SHORT).show();
+
             }
         });
 

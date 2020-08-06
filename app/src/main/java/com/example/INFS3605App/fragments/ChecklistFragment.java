@@ -89,7 +89,7 @@ public class ChecklistFragment extends Fragment {
         checklistRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         checklistRecycler.setHasFixedSize(true);
         safetyPlan = view.findViewById(R.id.safetyPlan);
-        SpannableString content = new SpannableString("More Information and Official Safety Plan found here.");
+        SpannableString content = new SpannableString("More Information and Official Safety Plan (various languages) found here.");
         content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
         safetyPlan.setText(content);
         noResults = view.findViewById(R.id.noResults);
