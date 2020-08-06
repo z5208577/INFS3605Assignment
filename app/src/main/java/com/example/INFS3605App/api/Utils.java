@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
+
 public class Utils {  public static ColorDrawable[] vibrantLightColorList =
         {
                 new ColorDrawable(Color.parseColor("#ffeead")),

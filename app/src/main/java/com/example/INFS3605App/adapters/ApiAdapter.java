@@ -1,15 +1,15 @@
 package com.example.INFS3605App.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,16 +20,14 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.request.Request;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.example.INFS3605App.R;
 import com.example.INFS3605App.api.Utils;
-import com.example.INFS3605App.fragments.WorldCrisisNews;
-import com.example.INFS3605App.utils.Article  ;
-import java.util.List;
+import com.example.INFS3605App.utils.Article;
 
+import java.util.List;
 
 
 public class ApiAdapter extends RecyclerView.Adapter<ApiAdapter.MyViewHolder> {
@@ -54,6 +52,7 @@ public class ApiAdapter extends RecyclerView.Adapter<ApiAdapter.MyViewHolder> {
     public void onBindViewHolder(@NonNull MyViewHolder holders, int position) {
     final MyViewHolder holder = holders;
     Article utils = articles.get(position);
+
 
         RequestOptions requestOptions = new RequestOptions();
         requestOptions.placeholder(Utils.getRandomDrawbleColor());
@@ -87,6 +86,8 @@ public class ApiAdapter extends RecyclerView.Adapter<ApiAdapter.MyViewHolder> {
         holder.time.setText((" \u2022" + Utils.DateToTimeFormat(utils.getPublishedAt())));
         holder.published_ad.setText(Utils.DateFormat(utils.getPublishedAt()));
         holder.author.setText(utils.getAuthor());
+        holder.url.setText(utils.getUrl());
+
     }
 
     @Override
@@ -102,7 +103,7 @@ public class ApiAdapter extends RecyclerView.Adapter<ApiAdapter.MyViewHolder> {
         void onItemClick(View view, int position);
     }
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        TextView title, desc,author, published_ad,source, time;
+        TextView title, desc,author, published_ad,source, time,url;
         ImageView imageView;
         ProgressBar progressBar;
         OnItemClickListener onItemClickListener;
@@ -118,8 +119,17 @@ public class ApiAdapter extends RecyclerView.Adapter<ApiAdapter.MyViewHolder> {
             time = itemView.findViewById(R.id.time);
             imageView = itemView.findViewById(R.id.img);
             progressBar = itemView.findViewById(R.id.progress_load_photo);
+            url = itemView.findViewById(R.id.url);
 
-            this.onItemClickListener = onItemClickListener;
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                            Uri.parse(url.getText().toString()));
+                    context.startActivity(browserIntent);
+
+                }
+            });
 
         }
 

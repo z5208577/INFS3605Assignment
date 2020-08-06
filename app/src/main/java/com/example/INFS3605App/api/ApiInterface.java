@@ -14,7 +14,6 @@ public interface ApiInterface {
             @Query("apiKey") String apiKey
 
 
-
     );
 
 

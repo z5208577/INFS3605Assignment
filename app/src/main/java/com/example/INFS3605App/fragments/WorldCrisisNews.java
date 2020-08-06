@@ -1,65 +1,99 @@
 package com.example.INFS3605App.fragments;
-
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
-
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.Button;
+import android.widget.Toast;
 import com.example.INFS3605App.R;
+import com.example.INFS3605App.adapters.ApiAdapter;
+import com.example.INFS3605App.api.ApiClient;
+import com.example.INFS3605App.api.ApiInterface;
+import com.example.INFS3605App.api.Utils;
+import com.example.INFS3605App.ui.MainActivity;
+import com.example.INFS3605App.utils.Article;
+import com.example.INFS3605App.utils.News;
+import java.util.ArrayList;
+import java.util.List;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link WorldCrisisNews#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class WorldCrisisNews extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    public static final String API_KEY = "ae25e23ee3d044f9a96b9911516abfaf";
+    private RecyclerView recyclerView;
+    private RecyclerView.LayoutManager layoutManager;
+    private List<Article> articles = new ArrayList<>();
+    private ApiAdapter adapter;
+    private String TAG = MainActivity.class.getSimpleName();
+
+
 
     public WorldCrisisNews() {
-        // Required empty public constructor
-    }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment WorldCrisisNews.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static WorldCrisisNews newInstance(String param1, String param2) {
-        WorldCrisisNews fragment = new WorldCrisisNews();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+        // Required empty public constructor
+
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
+    public void LoadJson() {
+
+        ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
+        String country = Utils.getCountry();
+        Call<News> call;
+        call = apiInterface.getNews("covid-19", API_KEY);
+
+        call.enqueue(new Callback<News>() {
+            @Override
+            public void onResponse(Call<News> call, Response<News> response) {
+                System.out.println(response);
+                if (response.isSuccessful() && response.body().getArticle() != null) {
+                    if (!articles.isEmpty()) {
+                        articles.clear();
+
+                    }
+                    articles = response.body().getArticle();
+                    adapter = new ApiAdapter(articles, getActivity());
+                    recyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+
+
+                } else {
+                    Toast.makeText(getContext(), "Alan", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<News> call, Throwable t) {
+                Toast.makeText(getContext(), "Alan", Toast.LENGTH_SHORT).show();
+                System.out.println(t);
+            }
+        });
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_world_crisis_news, container, false);
+        View view = inflater.inflate(R.layout.fragment_world_crisis_news, container, false);
+        recyclerView = view.findViewById(R.id.recyclerView);
+        layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setNestedScrollingEnabled(false);
+        LoadJson();
+        recyclerView.setAdapter(adapter);
+        return view;
+
     }
+
+
 }
+
