@@ -8,6 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.example.INFS3605App.R;
 import com.example.INFS3605App.adapters.ApiAdapter;
@@ -31,6 +35,9 @@ public class WorldCrisisNews extends Fragment {
     private List<Article> articles = new ArrayList<>();
     private ApiAdapter adapter;
     private String TAG = MainActivity.class.getSimpleName();
+    private ImageView search;
+    public EditText keyword;
+    public ProgressBar progressBarNews;
 
 
 
@@ -45,12 +52,11 @@ public class WorldCrisisNews extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    public void LoadJson() {
-
+    public void LoadJson(String keyword) {
+        progressBarNews.setVisibility(View.VISIBLE);
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-        String country = Utils.getCountry();
         Call<News> call;
-        call = apiInterface.getNews("covid-19", API_KEY);
+        call = apiInterface.getNews(keyword, API_KEY);
 
         call.enqueue(new Callback<News>() {
             @Override
@@ -77,19 +83,31 @@ public class WorldCrisisNews extends Fragment {
                 System.out.println(t);
             }
         });
+        progressBarNews.setVisibility(View.GONE);
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_world_crisis_news, container, false);
+        progressBarNews = view.findViewById(R.id.progressBarNews);
+        progressBarNews.setVisibility(View.VISIBLE);
+        keyword = view.findViewById(R.id.keyword);
+        search = view.findViewById(R.id.search);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoadJson(keyword.getText().toString());
+            }
+        });
         recyclerView = view.findViewById(R.id.recyclerView);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setNestedScrollingEnabled(false);
-        LoadJson();
+        LoadJson(keyword.getText().toString());
         recyclerView.setAdapter(adapter);
+        progressBarNews.setVisibility(View.GONE);
         return view;
 
     }
