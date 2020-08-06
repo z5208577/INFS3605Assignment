@@ -10,9 +10,10 @@ public interface ApiInterface {
 
     @GET("everything")
     Call<News> getNews(
-            @Query("q") String keyword,
-            @Query("apiKey") String apiKey
-
+            @Query("qInTitle") String keyword,
+            @Query("apiKey") String apiKey,
+            @Query("sortBy") String option,
+            @Query("language") String language
 
     );
 

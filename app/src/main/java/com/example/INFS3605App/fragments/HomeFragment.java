@@ -125,7 +125,7 @@ public class HomeFragment extends Fragment {
         map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
+
                 AppCompatActivity activity = (AppCompatActivity) view.getContext();
                 MapFragment mapFragment = new MapFragment();
                 activity.getSupportFragmentManager().beginTransaction()
@@ -133,7 +133,6 @@ public class HomeFragment extends Fragment {
                         .addToBackStack(null)
                         .commit();
                 mBottomNavigationView.getMenu().findItem(R.id.bottomCrisisMap).setChecked(true);
-                */
                 Toast.makeText(getContext(), "This feature will be comming soon", Toast.LENGTH_SHORT).show();
 
             }

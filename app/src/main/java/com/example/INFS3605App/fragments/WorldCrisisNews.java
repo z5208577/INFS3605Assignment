@@ -56,7 +56,7 @@ public class WorldCrisisNews extends Fragment {
         progressBarNews.setVisibility(View.VISIBLE);
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
         Call<News> call;
-        call = apiInterface.getNews(keyword, API_KEY);
+        call = apiInterface.getNews(keyword, API_KEY,"publishedAt","en");
 
         call.enqueue(new Callback<News>() {
             @Override
@@ -71,15 +71,18 @@ public class WorldCrisisNews extends Fragment {
                     adapter = new ApiAdapter(articles, getActivity());
                     recyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
+                    if (articles.size()==0){
+                        Toast.makeText(getContext(), "Try a different keyword", Toast.LENGTH_SHORT).show();
+                    }
 
 
                 } else {
-                    Toast.makeText(getContext(), "Alan", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Error retrieving articles", Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
             public void onFailure(Call<News> call, Throwable t) {
-                Toast.makeText(getContext(), "Alan", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Error retrieving articles", Toast.LENGTH_SHORT).show();
                 System.out.println(t);
             }
         });
@@ -111,7 +114,4 @@ public class WorldCrisisNews extends Fragment {
         return view;
 
     }
-
-
 }
-

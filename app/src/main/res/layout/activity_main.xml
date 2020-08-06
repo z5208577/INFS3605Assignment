@@ -123,7 +123,8 @@
         android:layout_marginEnd="69dp"
         android:layout_marginRight="69dp"
         android:layout_marginBottom="98dp"
-        android:text="skip sign in (testing)" />
+        android:text="skip sign in (testing)"
+        android:visibility="invisible" />
 
     <ImageView
         android:id="@+id/loginLogo"
